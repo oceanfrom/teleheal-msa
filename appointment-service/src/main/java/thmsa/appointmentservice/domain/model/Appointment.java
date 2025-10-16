@@ -1,0 +1,43 @@
+package thmsa.appointmentservice.domain.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+import thmsa.appointmentservice.domain.enums.AppointmentStatus;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Entity
+@Table(name = "appointments")
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Appointment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(nullable = false)
+    private UUID patientId;
+
+    @Column(nullable = false)
+    private UUID doctorId;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status;
+    private LocalDateTime appointmentDate;
+    private int appointmentDuration;
+
+    private String reason;
+
+    @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AppointmentHistory> history = new ArrayList<>();
+
+    @Version
+    private Long version;
+}

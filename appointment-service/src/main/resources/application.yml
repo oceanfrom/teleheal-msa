@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5435/appointment_service
+    username: ttsk
+    password: ttsk
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: appointmentEvent:thmsa.appointmentservice.event.AppointmentEvent
+
+server:
+  port: 8113
+
+appointment:
+  duration:
+    time: 20
+  topic:
+    name: "appointment.events"
+    dlq:
+      name: "appointment.events.dlq"
+
+outbox:
+  poll-interval-ms: 1000
+  max-retries: 3
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    enable:
+      all: true
