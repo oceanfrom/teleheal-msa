@@ -2,15 +2,23 @@ package thmsa.userservice.mapper;
 
 import org.springframework.stereotype.Component;
 import thmsa.userservice.domain.dto.MedicalHistoryEntryResponse;
-import thmsa.userservice.domain.dto.MedicalRecordRequest;
 import thmsa.userservice.domain.dto.MedicalRecordResponse;
+import thmsa.userservice.domain.model.DoctorProfile;
 import thmsa.userservice.domain.model.MedicalRecord;
+import thmsa.userservice.domain.model.PatientProfile;
 
 import java.util.stream.Collectors;
 
 
 @Component
 public class MedicalRecordMapper {
+
+    public MedicalRecord toEntity(PatientProfile patientProfile, DoctorProfile doctorProfile) {
+        return MedicalRecord.builder()
+                .patient(patientProfile)
+                .doctor(doctorProfile)
+                .build();
+    }
 
     public MedicalRecordResponse toResponse(MedicalRecord record) {
         return MedicalRecordResponse.builder()

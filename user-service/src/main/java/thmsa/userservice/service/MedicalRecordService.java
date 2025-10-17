@@ -10,9 +10,9 @@ public interface MedicalRecordService {
 
     MedicalRecordResponse getMedicalRecordById(UUID id);
 
-    MedicalRecordResponse addHistoryEntry(UUID recordId, MedicalHistoryEntryRequest request, UUID doctorId);
+    MedicalRecordResponse addHistoryEntry(MedicalHistoryEntryRequest medicalHistoryEntryRequest);
 
-    MedicalRecordResponse updateHistoryEntry(UUID recordId, UUID entryId, MedicalHistoryEntryRequest request, UUID doctorId);
+    MedicalRecordResponse updateHistoryEntry(UUID entryId, MedicalHistoryEntryRequest medicalHistoryEntryRequest);
 
-    void deleteHistoryEntry(UUID recordId, UUID entryId, UUID doctorId);
+    void deleteHistoryEntry(MedicalHistoryEntryDeleteRequest medicalHistoryEntryDeleteRequest);
 }

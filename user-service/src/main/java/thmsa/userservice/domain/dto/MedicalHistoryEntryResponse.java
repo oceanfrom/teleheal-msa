@@ -4,11 +4,14 @@ import lombok.Builder;
 
 import java.time.LocalDate;
 import java.util.UUID;
+
 @Builder
 public record MedicalHistoryEntryResponse(
-        LocalDate date,
         UUID medicalRecordId,
-        UUID appointmentId,
+        UUID doctorId,
+        String doctorName,
         String diagnosis,
-        String notes
-) {}
+        String notes,
+        LocalDate date
+) {
+}

@@ -24,8 +24,8 @@ public class MedicalHistoryEntry {
     private MedicalRecord medicalRecord;
 
     private LocalDate date;
-    private UUID appointmentId;
-
     private String diagnosis;
     private String notes;
+    private UUID appointmentId;
+
 }

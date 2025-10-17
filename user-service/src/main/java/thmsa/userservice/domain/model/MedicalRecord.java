@@ -2,6 +2,7 @@ package thmsa.userservice.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,6 +29,7 @@ public class MedicalRecord {
     @JoinColumn(name = "doctor_id", nullable = false)
     private DoctorProfile doctor;
 
+    @CreatedDate
     private LocalDate createdAt;
 
     @OneToMany(mappedBy = "medicalRecord", cascade = CascadeType.ALL, orphanRemoval = true)

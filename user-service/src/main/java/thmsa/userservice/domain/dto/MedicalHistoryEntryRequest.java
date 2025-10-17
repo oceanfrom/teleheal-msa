@@ -5,10 +5,9 @@ import java.util.UUID;
 
 public record MedicalHistoryEntryRequest(
         UUID medicalRecordId,
-        LocalDate date,
         UUID doctorId,
         String doctorName,
         String diagnosis,
         String notes,
-        UUID appointmentId
+        LocalDate date
 ) {}

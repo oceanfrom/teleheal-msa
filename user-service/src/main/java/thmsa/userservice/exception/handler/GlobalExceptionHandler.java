@@ -5,9 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import thmsa.userservice.exception.DoctorProfileNotFoundException;
-import thmsa.userservice.exception.OutboxPublisherException;
-import thmsa.userservice.exception.UserNotFoundException;
+import thmsa.userservice.exception.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +44,34 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleOutboxPublisherException (OutboxPublisherException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(PatientProfileNotFoundException.class)
+    public ResponseEntity<?> handlePatientProfileNotFoundException (PatientProfileNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MedicalRecordNotFoundException.class)
+    public ResponseEntity<?> handleMedicalRecordNotFoundException (MedicalRecordNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UnauthorizedDoctorException.class)
+    public ResponseEntity<?> handleUnauthorizedDoctorException (UnauthorizedDoctorException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MedicalHistoryEntryNotFoundException.class)
+    public ResponseEntity<?> handleMedicalHistoryEntryNotFoundException (MedicalHistoryEntryNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
 
