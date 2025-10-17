@@ -31,7 +31,6 @@ public class MedicalRecordMapper {
                 .history(record.getHistory().stream()
                         .map(h -> MedicalHistoryEntryResponse.builder()
                                 .date(h.getDate())
-                                .appointmentId(h.getAppointmentId())
                                 .diagnosis(h.getDiagnosis())
                                 .notes(h.getNotes())
                                 .build())
