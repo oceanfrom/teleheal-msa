@@ -1,5 +1,6 @@
 package thmsa.userservice.service;
 
+import thmsa.userservice.domain.dto.PatientHistoryResponse;
 import thmsa.userservice.domain.dto.PatientProfileRequest;
 import thmsa.userservice.domain.dto.PatientProfileResponse;
 import thmsa.userservice.domain.model.PatientProfile;
@@ -12,4 +13,5 @@ public interface PatientProfileService {
     PatientProfileResponse updatePatient(PatientProfileRequest request);
     PatientProfileResponse getPatientById(UUID patientId);
     List<PatientProfileResponse> getAllPatients();
+    List<PatientHistoryResponse> getPatientHistory(UUID patientId);
 }

@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, UUID> {
     List<MedicalRecord> findAllByPatientId(UUID patientId);
     List<MedicalRecord> findAllByDoctorId(UUID doctorId);
+    MedicalRecord findByPatientIdAndDoctorId(UUID patientId, UUID doctorId);
 }

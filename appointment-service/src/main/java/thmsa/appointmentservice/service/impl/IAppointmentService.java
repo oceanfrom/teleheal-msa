@@ -23,6 +23,7 @@ import thmsa.appointmentservice.service.AppointmentService;
 import thmsa.appointmentservice.service.WeeklySlotService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -44,6 +45,15 @@ public class IAppointmentService implements AppointmentService {
         var appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFondException("Appointment with id " + id + " not found"));
         return appointmentMapper.toResponse(appointment);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<AppointmentResponse> getAppointmentsByPatientId(UUID patientId) {
+        return appointmentRepository.findAppointmentsByPatientId(patientId)
+                .stream()
+                .map(appointmentMapper::toResponse)
+                .toList();
     }
 
     @Transactional
@@ -137,7 +147,7 @@ public class IAppointmentService implements AppointmentService {
         return appointmentMapper.toResponse(appointment);
     }
 
-    @Scheduled
+    @Scheduled(fixedRate = 30 * 60 * 1000)
     @Transactional
     @Override
     public void autoConfirmUnconfirmedAppointments() {

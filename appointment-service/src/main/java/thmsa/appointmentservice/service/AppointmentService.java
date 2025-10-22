@@ -1,13 +1,13 @@
 package thmsa.appointmentservice.service;
 
 import thmsa.appointmentservice.domain.dto.*;
-import thmsa.appointmentservice.domain.enums.PerformedByType;
-import thmsa.appointmentservice.domain.model.Appointment;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface AppointmentService {
     AppointmentResponse getAppointmentById(UUID id);
+    List<AppointmentResponse> getAppointmentsByPatientId(UUID patientId);
     AppointmentResponse createAppointment(AppointmentRequest appointmentRequest);
 
     AppointmentResponse confirmAppointment(AppointmentConfirmRequest appointmentConfirmRequest);

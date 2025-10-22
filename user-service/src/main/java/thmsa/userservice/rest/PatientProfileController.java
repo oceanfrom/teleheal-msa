@@ -30,6 +30,11 @@ public class PatientProfileController {
         return ResponseEntity.ok(patientProfileService.getPatientById(id));
     }
 
+    @GetMapping("/history/{id}")
+    ResponseEntity<?> getPatientHistory(@PathVariable("id") UUID id) {
+        return ResponseEntity.ok(patientProfileService.getPatientHistory(id));
+    }
+
     @PutMapping("/update")
     ResponseEntity<?> updatePatientProfile(@RequestBody @Valid PatientProfileRequest patientProfileRequest) {
         return ResponseEntity.ok(patientProfileService.updatePatient(patientProfileRequest));

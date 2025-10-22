@@ -14,5 +14,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     boolean existsByDoctorIdAndAppointmentDate(UUID doctorId, LocalDateTime appointmentDate);
     boolean existsByDoctorIdAndAppointmentDateAfter(UUID doctorId, LocalDateTime appointmentDate);
     List<Appointment> findAllByStatusAndCreatedAtBefore(AppointmentStatus status, LocalDateTime dateTime);
-
+    List<Appointment> findAppointmentsByPatientId(UUID patientId);
 }

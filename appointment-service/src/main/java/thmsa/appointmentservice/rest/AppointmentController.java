@@ -21,6 +21,11 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.getAppointmentById(id));
     }
 
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<?> getAppointmentByPatientId(@PathVariable UUID patientId) {
+        return ResponseEntity.ok(appointmentService.getAppointmentsByPatientId(patientId));
+    }
+
     @PostMapping
     public ResponseEntity<?> createAppointment(@RequestBody @Valid AppointmentRequest appointmentRequest) {
         return ResponseEntity.ok(appointmentService.createAppointment(appointmentRequest));

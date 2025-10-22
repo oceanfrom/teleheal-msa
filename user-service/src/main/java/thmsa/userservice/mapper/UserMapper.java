@@ -28,7 +28,7 @@ public class UserMapper {
     public User toEntity(UserRequest request) {
         if (request == null) return null;
         return User.builder()
-                .name(request.fullName())
+                .name(request.name())
                 .email(request.email())
                 .phoneNumber(request.phoneNumber())
                 .dateOfBirth(request.dateOfBirth())

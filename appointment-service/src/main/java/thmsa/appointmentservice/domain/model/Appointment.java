@@ -3,6 +3,7 @@ package thmsa.appointmentservice.domain.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import thmsa.appointmentservice.domain.enums.AppointmentStatus;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
