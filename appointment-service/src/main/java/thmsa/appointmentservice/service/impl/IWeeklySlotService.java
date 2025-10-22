@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class IWeeklySlotService implements WeeklySlotService {
+public class    IWeeklySlotService implements WeeklySlotService {
 
     private final WeeklySlotRepository weeklySlotRepository;
     private final AppointmentRepository appointmentRepository;

@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface PatientProfileService {
     PatientProfileResponse createPatientProfile(PatientProfileRequest patientProfileRequest);
-    PatientProfileResponse updatePatient(UUID patientId, PatientProfileRequest request);
+    PatientProfileResponse updatePatient(PatientProfileRequest request);
     PatientProfileResponse getPatientById(UUID patientId);
     List<PatientProfileResponse> getAllPatients();
 }

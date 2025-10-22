@@ -11,7 +11,7 @@ public interface AppointmentService {
     AppointmentResponse createAppointment(AppointmentRequest appointmentRequest);
 
     AppointmentResponse confirmAppointment(AppointmentConfirmRequest appointmentConfirmRequest);
-
+    void autoConfirmUnconfirmedAppointments();
     AppointmentResponse cancelAppointment(AppointmentCancelRequest appointmentCancelRequest);
 
     void rescheduleAppointment(RescheduleAppointmentDateRequest rescheduleAppointmentDateRequest);

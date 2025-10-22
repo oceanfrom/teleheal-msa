@@ -2,6 +2,7 @@ package thmsa.appointmentservice.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import thmsa.appointmentservice.domain.enums.AppointmentStatus;
 
 import java.time.LocalDateTime;
@@ -34,6 +35,10 @@ public class Appointment {
     private int appointmentDuration;
 
     private String reason;
+
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AppointmentHistory> history = new ArrayList<>();

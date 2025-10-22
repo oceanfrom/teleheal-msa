@@ -2,6 +2,8 @@ package thmsa.appointmentservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import thmsa.appointmentservice.domain.dto.*;
@@ -31,8 +33,10 @@ public class IAppointmentService implements AppointmentService {
     private final WeeklySlotService weeklySlotService;
     private final AppointmentHistoryService appointmentHistoryService;
     private final OutboxEventPublisher outboxEventPublisher;
-
     private final AppointmentMapper appointmentMapper;
+    @Value("${appointment.auto-confirm-after-hours}")
+    private int AUTO_CONFIRM_AFTER_HOURS;
+
 
     @Transactional
     @Override
@@ -131,6 +135,49 @@ public class IAppointmentService implements AppointmentService {
                 EventType.CONFIRMED
         );
         return appointmentMapper.toResponse(appointment);
+    }
+
+    @Scheduled
+    @Transactional
+    @Override
+    public void autoConfirmUnconfirmedAppointments() {
+        var trashHold = LocalDateTime.now().minusHours(AUTO_CONFIRM_AFTER_HOURS);
+        var pendingAppointments = appointmentRepository.findAllByStatusAndCreatedAtBefore(AppointmentStatus.SCHEDULED, trashHold);
+
+        if (pendingAppointments.isEmpty()) return;
+
+        pendingAppointments.forEach(appointment -> {
+                    appointment.setStatus(AppointmentStatus.CONFIRMED);
+                    appointmentRepository.save(appointment);
+
+                    appointmentHistoryService.record(
+                            appointment,
+                            AppointmentStatus.CONFIRMED,
+                            PerformedByType.SYSTEM,
+                            "Automatically confirmed after waiting period",
+                            null,
+                            null
+                    );
+
+                    outboxEventPublisher.publish(
+                            new AppointmentEvent(
+                                    appointment.getId(),
+                                    appointment.getDoctorId(),
+                                    null,
+                                    appointment.getPatientId(),
+                                    appointment.getAppointmentDate(),
+                                    AppointmentStatus.CONFIRMED,
+                                    EventType.CONFIRMED,
+                                    PerformedByType.SYSTEM,
+                                    "Auto-confirmed by scheduler",
+                                    null
+                            ),
+                            "Appointment",
+                            appointment.getId(),
+                            EventType.CONFIRMED
+                    );
+                }
+        );
     }
 
     @Transactional

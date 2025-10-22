@@ -25,6 +25,7 @@ appointment:
     name: "appointment.events"
     dlq:
       name: "appointment.events.dlq"
+  auto-confirm-after-hours: 12
 
 outbox:
   poll-interval-ms: 1000
