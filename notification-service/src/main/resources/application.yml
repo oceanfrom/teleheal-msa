@@ -28,3 +28,12 @@ server:
 appointment:
   topic:
     name: "appointment.events"
+  group-id:
+    name: "AppointmentGroup"
+  event:
+    type:
+      created: "CREATED"
+      confirmed: "CONFIRMED"
+      cancelled: "CANCELLED"
+      rescheduled: "RESCHEDULED"
+      upcoming: "UPCOMING"
