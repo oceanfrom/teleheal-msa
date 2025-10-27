@@ -26,6 +26,16 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.getAppointmentsByPatientId(patientId));
     }
 
+    @GetMapping("/patient/{patientId}/upcoming")
+    public ResponseEntity<?> getUpcomingAppointments(@PathVariable UUID patientId) {
+        return ResponseEntity.ok(appointmentService.getUpcomingAppointments(patientId));
+    }
+
+    @GetMapping("/{doctorId}/schedule")
+    public ResponseEntity<?> getAppointmentByDoctorId(@PathVariable UUID doctorId) {
+        return ResponseEntity.ok(appointmentService.getAppointmentsByDoctorId(doctorId));
+    }
+
     @PostMapping
     public ResponseEntity<?> createAppointment(@RequestBody @Valid AppointmentRequest appointmentRequest) {
         return ResponseEntity.ok(appointmentService.createAppointment(appointmentRequest));

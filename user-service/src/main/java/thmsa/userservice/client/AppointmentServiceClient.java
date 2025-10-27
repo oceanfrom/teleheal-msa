@@ -1,6 +1,7 @@
 package thmsa.userservice.client;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,15 +14,26 @@ import java.util.UUID;
 public class AppointmentServiceClient {
 
     private final RestTemplate restTemplate;
-    private final String APPOINTMENT_SERVICE_URL = "http://localhost:8113/api/v1/appointments/patient/";
+    @Value("${appointment.service.url}")
+    private String APPOINTMENT_SERVICE_URL;
 
     public List<AppointmentResponse> getAppointmentsByPatientId(UUID patientId) {
-        AppointmentResponse[] response = restTemplate.getForObject(
+        var appointmentResponses = restTemplate.getForObject(
                 APPOINTMENT_SERVICE_URL + patientId,
                 AppointmentResponse[].class
         );
 
-        if (response == null) return List.of();
-        return Arrays.asList(response);
+        if (appointmentResponses == null) return List.of();
+        return Arrays.asList(appointmentResponses);
+    }
+
+    public List<AppointmentResponse> getUpcomingAppointments(UUID patientId) {
+        var appointmentResponses = restTemplate.getForObject(
+                APPOINTMENT_SERVICE_URL + patientId,
+                AppointmentResponse[].class
+        );
+
+        if (appointmentResponses == null) return List.of();
+        return Arrays.asList(appointmentResponses);
     }
 }

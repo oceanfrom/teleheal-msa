@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import thmsa.userservice.client.AppointmentResponse;
 import thmsa.userservice.client.AppointmentServiceClient;
 import thmsa.userservice.domain.dto.PatientHistoryResponse;
 import thmsa.userservice.domain.dto.PatientProfileRequest;
@@ -100,5 +101,10 @@ public class IPatientProfileService implements PatientProfileService {
                     );
                 })
                 .toList();
+    }
+
+    @Override
+    public List<AppointmentResponse> getPatientUpcomingAppointments(UUID patientId) {
+        return appointmentServiceClient.getUpcomingAppointments(patientId);
     }
 }

@@ -1,10 +1,9 @@
 package thmsa.appointmentservice.repository;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import thmsa.appointmentservice.domain.model.Appointment;
 import thmsa.appointmentservice.domain.model.WeeklySlot;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,6 +13,7 @@ import java.util.UUID;
 @Repository
 public interface WeeklySlotRepository extends JpaRepository<WeeklySlot, UUID> {
     List<WeeklySlot> findByDoctorId(UUID doctorId);
+
     List<WeeklySlot> findByDoctorIdAndDayOfWeek(UUID doctorId, DayOfWeek dayOfWeek);
 
     List<WeeklySlot> findByDoctorIdAndDateOverride(UUID doctorId, LocalDate dateOverride);

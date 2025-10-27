@@ -37,6 +37,19 @@ services:
       timeout: 5s
       retries: 5
 
+  mongodb:
+    image: mongo:latest
+    container_name: document-mongo
+    restart: always
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ttsk
+      MONGO_INITDB_ROOT_PASSWORD: ttsk
+      MONGO_INITDB_DATABASE: documentdb
+    volumes:
+      - mongo-data:/data/db
+
   kafka1:
     image: confluentinc/cp-kafka:latest
     container_name: kafka1
@@ -121,6 +134,7 @@ services:
 volumes:
   postgres_data:
   grafana-storage:
+  mongo-data:
 
 networks:
   th:

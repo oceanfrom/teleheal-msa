@@ -28,7 +28,7 @@ outbox:
 
 appointment:
   service:
-    url: http://localhost:8113
+    url: http://localhost:8113/api/v1/appointments/patient/
 
 management:
   endpoints:

@@ -16,6 +16,7 @@ import thmsa.appointmentservice.exception.AppointmentStatusException;
 import thmsa.appointmentservice.exception.InvalidAppointmentTimeException;
 import thmsa.appointmentservice.exception.AppointmentNotFondException;
 import thmsa.appointmentservice.mapper.AppointmentMapper;
+import thmsa.appointmentservice.mapper.DoctorAppointmentsMapper;
 import thmsa.appointmentservice.outbox.OutboxEventPublisher;
 import thmsa.appointmentservice.repository.AppointmentRepository;
 import thmsa.appointmentservice.service.AppointmentHistoryService;
@@ -23,6 +24,7 @@ import thmsa.appointmentservice.service.AppointmentService;
 import thmsa.appointmentservice.service.WeeklySlotService;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +37,9 @@ public class IAppointmentService implements AppointmentService {
     private final AppointmentHistoryService appointmentHistoryService;
     private final OutboxEventPublisher outboxEventPublisher;
     private final AppointmentMapper appointmentMapper;
-    @Value("${appointment.auto-confirm-after-hours}")
+    private final DoctorAppointmentsMapper doctorAppointmentsMapper;
+
+    @Value("${appointment.auto-confirm-after-hour")
     private int AUTO_CONFIRM_AFTER_HOURS;
 
 
@@ -53,6 +57,15 @@ public class IAppointmentService implements AppointmentService {
         return appointmentRepository.findAppointmentsByPatientId(patientId)
                 .stream()
                 .map(appointmentMapper::toResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<DoctorAppointmentsResponse> getAppointmentsByDoctorId(UUID doctorId) {
+        return appointmentRepository.findAllByDoctorId(doctorId)
+                .stream()
+                .map(doctorAppointmentsMapper::toResponse)
                 .toList();
     }
 
@@ -321,6 +334,49 @@ public class IAppointmentService implements AppointmentService {
                     appointment.getId(),
                     EventType.RESCHEDULED
             );
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<AppointmentResponse> getUpcomingAppointments(UUID patientId) {
+        List<AppointmentStatus> activeStatuses = List.of(AppointmentStatus.SCHEDULED, AppointmentStatus.CONFIRMED);
+
+        return appointmentRepository
+                .findTop5ByPatientIdAndStatusInOrderByAppointmentDateAsc(patientId, activeStatuses)
+                .stream()
+                .map(appointmentMapper::toResponse)
+                .toList();
+    }
+
+    @Transactional
+    @Scheduled(fixedRate = 15 * 60 * 1000)
+    @Override
+    public void sendUpcomingAppointmentReminders() {
+        var now = LocalDateTime.now();
+        var twoHoursLater = now.plusHours(2);
+
+        var upcomingAppointments = appointmentRepository.findAppointmentsWithinNextHours(
+                now,
+                twoHoursLater,
+                Arrays.asList(AppointmentStatus.RESCHEDULED, AppointmentStatus.CONFIRMED)
+        );
+
+        if (upcomingAppointments.isEmpty()) return;
+
+        for (var appointment : upcomingAppointments) {
+            var event = new AppointmentEvent(
+                    appointment.getId(),
+                    appointment.getDoctorId(),
+                    null,
+                    appointment.getPatientId(),
+                    appointment.getAppointmentDate(),
+                    appointment.getStatus(),
+                    EventType.UPCOMING,
+                    PerformedByType.SYSTEM,
+                    null,
+                    null);
+
+            outboxEventPublisher.publish(event, "Appointment", appointment.getId(), EventType.UPCOMING);
         }
     }
 

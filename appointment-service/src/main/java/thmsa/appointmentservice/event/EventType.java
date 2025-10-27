@@ -7,5 +7,6 @@ public enum EventType {
     CREATED,
     CONFIRMED,
     CANCELLED,
-    RESCHEDULED
+    RESCHEDULED,
+    UPCOMING
 }
